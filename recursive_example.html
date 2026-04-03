@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0C0E14;
+    color: #E8E6E1;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem;
+  }
+
+  .poster {
+    width: 900px;
+    background: linear-gradient(170deg, #10131C 0%, #0C0E14 40%, #111521 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 24px;
+    padding: 56px 56px 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .poster::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .poster::after {
+    content: '';
+    position: absolute;
+    bottom: -80px;
+    left: -80px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(52, 211, 153, 0.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header {
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  .header h1 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #F1F0ED;
+    margin-bottom: 8px;
+  }
+
+  .header h1 span {
+    color: #818CF8;
+  }
+
+  .header p {
+    font-size: 15px;
+    color: #6B7280;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  /* ── Phase blocks ── */
+  .phase {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 0 24px;
+    position: relative;
+  }
+
+  .phase-number {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 22px;
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+
+  .phase:nth-child(1) .phase-number { background: rgba(99, 102, 241, 0.15); color: #818CF8; border: 1px solid rgba(99, 102, 241, 0.25); }
+  .phase:nth-child(3) .phase-number { background: rgba(251, 146, 60, 0.12); color: #FB923C; border: 1px solid rgba(251, 146, 60, 0.2); }
+  .phase:nth-child(5) .phase-number { background: rgba(52, 211, 153, 0.12); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.2); }
+
+  .phase-content {
+    padding-top: 6px;
+  }
+
+  .phase-content h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .phase:nth-child(1) .phase-content h2 { color: #A5B4FC; }
+  .phase:nth-child(3) .phase-content h2 { color: #FDBA74; }
+  .phase:nth-child(5) .phase-content h2 { color: #6EE7B7; }
+
+  .phase-content p {
+    font-size: 14px;
+    color: #9CA3AF;
+    line-height: 1.55;
+    max-width: 520px;
+  }
+
+  /* ── Connector lines between phases ── */
+  .connector {
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 0 24px;
+    height: 48px;
+  }
+
+  .connector-line {
+    display: flex;
+    justify-content: center;
+  }
+
+  .connector-line .dot-line {
+    width: 2px;
+    height: 100%;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.1) 0px,
+      rgba(255,255,255,0.1) 4px,
+      transparent 4px,
+      transparent 10px
+    );
+  }
+
+  /* ── Diagram area ── */
+  .diagram-area {
+    grid-column: 1 / -1;
+    margin-top: 20px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 28px 24px 20px;
+    position: relative;
+  }
+
+  /* ── Table visual ── */
+  .lookup-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+
+  .lookup-table thead th {
+    text-align: left;
+    padding: 8px 12px;
+    color: #6B7280;
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .lookup-table tbody td {
+    padding: 7px 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    color: #9CA3AF;
+  }
+
+  .lookup-table .filled td {
+    color: #D1D5DB;
+  }
+
+  .val-known { color: #34D399 !important; font-weight: 600; }
+  .val-none { color: #4B5563 !important; font-style: italic; }
+
+  /* ── Recursion tree ── */
+  .tree-svg {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ── Bubble up ── */
+  .bubble-svg {
+    width: 100%;
+    height: auto;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    margin-top: 36px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #4B5563;
+    letter-spacing: 0.5px;
+  }
+
+  .footer .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: #818CF8;
+    background: rgba(99, 102, 241, 0.1);
+    padding: 4px 12px;
+    border-radius: 6px;
+    border: 1px solid rgba(99, 102, 241, 0.15);
+  }
+</style>
+</head>
+<body>
+<div class="poster">
+
+  <div class="header">
+    <h1>How <span>optimal_p_win</span> works</h1>
+    <p>A recursive lookup fills the entire probability table from just a handful of known outcomes. Disclaimer - this diagram is AI generated, but it does explain the process quite well.</p>
+  </div>
+
+  <div class="flow">
+
+    <!-- ═══ PHASE 1 ═══ -->
+    <div class="phase">
+      <div class="phase-number">1</div>
+      <div class="phase-content">
+        <h2>Seed known outcomes</h2>
+        <p>States where the winner is already decided get their probabilities filled in first. Everything else starts as <code style="color:#818CF8;font-family:'JetBrains Mono',monospace;font-size:13px;">None</code>.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div style="display:flex;justify-content:center"><div class="dot-line" style="width:2px;height:100%;background:repeating-linear-gradient(to bottom,rgba(255,255,255,0.1) 0px,rgba(255,255,255,0.1) 4px,transparent 4px,transparent 10px)"></div></div>
+      <div class="diagram-area">
+        <table class="lookup-table">
+          <thead><tr><th>Game state</th><th>p_win_if_roll</th><th>p_win_if_bank</th></tr></thead>
+          <tbody>
+            <tr class="filled"><td>(p1, 105, 80, 0)</td><td class="val-known">1.000</td><td class="val-known">1.000</td></tr>
+            <tr class="filled"><td>(p2, 90, 110, 0)</td><td class="val-known">—</td><td class="val-known">0.000</td></tr>
+            <tr class="filled"><td>(p1, 100, 95, 0)</td><td class="val-known">1.000</td><td class="val-known">1.000</td></tr>
+            <tr><td style="color:#4B5563">(p1, 40, 55, 6)</td><td class="val-none">None</td><td class="val-none">None</td></tr>
+            <tr><td style="color:#4B5563">(p2, 30, 70, 0)</td><td class="val-none">None</td><td class="val-none">None</td></tr>
+            <tr><td style="color:#374151">⋯ thousands more ⋯</td><td class="val-none">None</td><td class="val-none">None</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 2 ═══ -->
+    <div class="phase">
+      <div class="phase-number">2</div>
+      <div class="phase-content">
+        <h2>Recurse into the unknown</h2>
+        <p>Call the function on a state with no probabilities. It rolls all 36 dice combos and calls itself on each result — drilling deeper until it hits a known state.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div style="display:flex;justify-content:center"><div class="dot-line" style="width:2px;height:100%;background:repeating-linear-gradient(to bottom,rgba(255,255,255,0.1) 0px,rgba(255,255,255,0.1) 4px,transparent 4px,transparent 10px)"></div></div>
+      <div class="diagram-area">
+        <svg class="tree-svg" viewBox="0 0 740 310" xmlns="http://www.w3.org/2000/svg">
+          <!-- Root call -->
+          <rect x="225" y="8" width="290" height="38" rx="10" fill="rgba(251,146,60,0.12)" stroke="rgba(251,146,60,0.3)" stroke-width="1"/>
+          <text x="370" y="32" text-anchor="middle" fill="#FDBA74" font-family="JetBrains Mono, monospace" font-size="12" font-weight="600">optimal_p_win(p1, 40, 55, 6)</text>
+
+          <text x="370" y="62" text-anchor="middle" fill="#6B7280" font-family="DM Sans, sans-serif" font-size="11">Not in table → simulate all 36 dice outcomes</text>
+
+          <!-- Fan lines -->
+          <line x1="270" y1="46" x2="90" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <line x1="330" y1="46" x2="270" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <line x1="410" y1="46" x2="470" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <line x1="470" y1="46" x2="650" y2="100" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+          <!-- Dice labels -->
+          <text x="90" y="96" text-anchor="middle" fill="#4B5563" font-family="DM Sans" font-size="10">⚀ ⚀</text>
+          <text x="270" y="96" text-anchor="middle" fill="#4B5563" font-family="DM Sans" font-size="10">⚀ ⚃</text>
+          <text x="370" y="96" text-anchor="middle" fill="#4B5563" font-family="DM Sans" font-size="10">⋯</text>
+          <text x="470" y="96" text-anchor="middle" fill="#4B5563" font-family="DM Sans" font-size="10">⚂ ⚃</text>
+          <text x="650" y="96" text-anchor="middle" fill="#4B5563" font-family="DM Sans" font-size="10">⚅ ⚅</text>
+
+          <!-- Outcome boxes -->
+          <rect x="22" y="105" width="136" height="48" rx="8" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="0.75"/>
+          <text x="90" y="124" text-anchor="middle" fill="#A5B4FC" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">SUPERSKUNK</text>
+          <text x="90" y="142" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="10">my_score → 0</text>
+
+          <rect x="202" y="105" width="136" height="48" rx="8" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="0.75"/>
+          <text x="270" y="124" text-anchor="middle" fill="#A5B4FC" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">SKUNK</text>
+          <text x="270" y="142" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="10">turn_score → 0</text>
+
+          <rect x="402" y="105" width="136" height="48" rx="8" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="0.75"/>
+          <text x="470" y="124" text-anchor="middle" fill="#A5B4FC" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">3 + 4 = 7</text>
+          <text x="470" y="142" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="10">turn_score → 13</text>
+
+          <rect x="582" y="105" width="136" height="48" rx="8" fill="rgba(99,102,241,0.08)" stroke="rgba(99,102,241,0.2)" stroke-width="0.75"/>
+          <text x="650" y="124" text-anchor="middle" fill="#A5B4FC" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">6 + 6 = 12</text>
+          <text x="650" y="142" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="10">turn_score → 18</text>
+
+          <!-- Arrows down -->
+          <line x1="90" y1="153" x2="90" y2="185" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="270" y1="153" x2="270" y2="185" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="470" y1="153" x2="470" y2="185" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3 3"/>
+          <line x1="650" y1="153" x2="650" y2="185" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3 3"/>
+
+          <!-- Recursive call labels -->
+          <text x="90" y="170" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="9">opponent's turn</text>
+          <text x="270" y="170" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="9">opponent's turn</text>
+          <text x="470" y="170" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="9">still my turn</text>
+          <text x="650" y="170" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="9">still my turn</text>
+
+          <!-- Deeper recursive calls -->
+          <rect x="12" y="188" width="156" height="32" rx="7" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.15)" stroke-width="0.75"/>
+          <text x="90" y="209" text-anchor="middle" fill="#FB923C" font-family="JetBrains Mono, monospace" font-size="9.5">optimal(p2, 55, 0, 0)</text>
+
+          <rect x="192" y="188" width="156" height="32" rx="7" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.15)" stroke-width="0.75"/>
+          <text x="270" y="209" text-anchor="middle" fill="#FB923C" font-family="JetBrains Mono, monospace" font-size="9.5">optimal(p2, 55, 40, 0)</text>
+
+          <rect x="392" y="188" width="156" height="32" rx="7" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.15)" stroke-width="0.75"/>
+          <text x="470" y="209" text-anchor="middle" fill="#FB923C" font-family="JetBrains Mono, monospace" font-size="9.5">optimal(p1, 40, 55, 13)</text>
+
+          <rect x="572" y="188" width="156" height="32" rx="7" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.15)" stroke-width="0.75"/>
+          <text x="650" y="209" text-anchor="middle" fill="#FB923C" font-family="JetBrains Mono, monospace" font-size="9.5">optimal(p1, 40, 55, 18)</text>
+
+          <!-- Deeper dots -->
+          <line x1="90" y1="220" x2="90" y2="250" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2 4"/>
+          <line x1="270" y1="220" x2="270" y2="250" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2 4"/>
+          <line x1="470" y1="220" x2="470" y2="250" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2 4"/>
+          <line x1="650" y1="220" x2="650" y2="250" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="2 4"/>
+
+          <text x="90" y="266" text-anchor="middle" fill="#374151" font-family="DM Sans" font-size="10">recurse…</text>
+          <text x="270" y="266" text-anchor="middle" fill="#374151" font-family="DM Sans" font-size="10">recurse…</text>
+          <text x="470" y="266" text-anchor="middle" fill="#374151" font-family="DM Sans" font-size="10">recurse…</text>
+          <text x="650" y="266" text-anchor="middle" fill="#374151" font-family="DM Sans" font-size="10">recurse…</text>
+
+          <!-- Base case -->
+          <rect x="265" y="278" width="210" height="28" rx="8" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.25)" stroke-width="0.75"/>
+          <text x="370" y="297" text-anchor="middle" fill="#34D399" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">↓ Known state reached ↓</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- ═══ PHASE 3 ═══ -->
+    <div class="phase">
+      <div class="phase-number">3</div>
+      <div class="phase-content">
+        <h2>Bubble up and cache</h2>
+        <p>Probabilities flow back up through the call chain. Each state computes <code style="color:#34D399;font-family:'JetBrains Mono',monospace;font-size:13px;">p_roll</code> and <code style="color:#34D399;font-family:'JetBrains Mono',monospace;font-size:13px;">p_bank</code>, writes them to the table, and returns <code style="color:#34D399;font-family:'JetBrains Mono',monospace;font-size:13px;">max(roll, bank)</code>.</p>
+      </div>
+    </div>
+
+    <div class="phase">
+      <div style="display:flex;justify-content:center"><div class="dot-line" style="width:2px;height:100%;background:repeating-linear-gradient(to bottom,rgba(255,255,255,0.1) 0px,rgba(255,255,255,0.1) 4px,transparent 4px,transparent 10px)"></div></div>
+      <div class="diagram-area">
+        <svg class="bubble-svg" viewBox="0 0 740 240" xmlns="http://www.w3.org/2000/svg">
+          <!-- Base case -->
+          <rect x="245" y="190" width="250" height="38" rx="10" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.25)" stroke-width="1"/>
+          <text x="370" y="204" text-anchor="middle" fill="#6EE7B7" font-family="JetBrains Mono, monospace" font-size="11" font-weight="600">Known base case</text>
+          <text x="370" y="220" text-anchor="middle" fill="#6B7280" font-family="JetBrains Mono, monospace" font-size="10">p_win = 1.000</text>
+
+          <!-- Arrow up -->
+          <line x1="370" y1="188" x2="370" y2="152" stroke="#34D399" stroke-width="1.5"/>
+          <polygon points="365,155 370,145 375,155" fill="#34D399"/>
+          <text x="410" y="174" fill="#34D399" font-family="JetBrains Mono, monospace" font-size="10">returns 1.000</text>
+
+          <!-- Mid level -->
+          <rect x="210" y="100" width="320" height="44" rx="10" fill="rgba(251,146,60,0.08)" stroke="rgba(251,146,60,0.2)" stroke-width="1"/>
+          <text x="370" y="118" text-anchor="middle" fill="#FDBA74" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">optimal(p1, 40, 55, 18)</text>
+          <text x="370" y="134" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="10">computes roll = 0.72 · bank = 0.65</text>
+
+          <!-- Write badge -->
+          <rect x="548" y="106" width="120" height="28" rx="6" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.15)" stroke-width="0.75"/>
+          <text x="608" y="124" text-anchor="middle" fill="#34D399" font-family="JetBrains Mono, monospace" font-size="10">→ writes to table</text>
+
+          <!-- Arrow up -->
+          <line x1="370" y1="98" x2="370" y2="62" stroke="#FB923C" stroke-width="1.5"/>
+          <polygon points="365,65 370,55 375,65" fill="#FB923C"/>
+          <text x="430" y="82" fill="#FB923C" font-family="JetBrains Mono, monospace" font-size="10">returns max(0.72, 0.65) = 0.72</text>
+
+          <!-- Top level -->
+          <rect x="225" y="10" width="290" height="44" rx="10" fill="rgba(99,102,241,0.1)" stroke="rgba(99,102,241,0.25)" stroke-width="1"/>
+          <text x="370" y="28" text-anchor="middle" fill="#A5B4FC" font-family="JetBrains Mono, monospace" font-size="11" font-weight="500">optimal(p1, 40, 55, 6)</text>
+          <text x="370" y="44" text-anchor="middle" fill="#6B7280" font-family="DM Sans" font-size="10">averages all 36 returned values → decision</text>
+
+          <rect x="533" y="16" width="120" height="28" rx="6" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.15)" stroke-width="0.75"/>
+          <text x="593" y="34" text-anchor="middle" fill="#34D399" font-family="JetBrains Mono, monospace" font-size="10">→ writes to table</text>
+        </svg>
+
+        <div style="text-align:center;margin-top:12px;padding:10px 16px;background:rgba(52,211,153,0.06);border-radius:10px;border:1px solid rgba(52,211,153,0.1)">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#6EE7B7">Every computed state is now cached — future lookups return instantly</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span class="tag">RECURSIVE MEMOIZATION · DYNAMIC PROGRAMMING</span>
+    <span class="badge">SKUNK OPTIMAL STRATEGY</span>
+  </div>
+
+</div>
+</body>
+</html>

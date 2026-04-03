@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+env/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment / secrets
+.env
+*.log
+
+# my ignore
+trash/
+keep.txt
+myenv/
+sim_8.ipynb
+skunk_project_old.ipynb
+skunk_strategy_evolution_2.ipynb
+skunk_strategy_evolution_3.ipynb
+skunk_strategy_evolution_4.ipynb
+skunk_strategy_new_strat.ipynb
+skunk_strategy_sim_8.py

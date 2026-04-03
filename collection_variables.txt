@@ -1,0 +1,52 @@
+Per Game Table
+* game id
+* winner
+* Final score for both players
+* Total rolls for both players
+* Total turns
+* What other things might I want?
+* which strategy?
+
+Per turn table
+* game id
+* round id
+* player id
+* score at start of turn
+* score at end of turn
+* # of rolls 
+* skunked? or super skunked? or stop by choice?
+* strategy data 
+
+Per roll table
+* game id
+* round id
+* roll id
+* player id
+* skunk, safe, or super skunk?
+* die one score
+* die two score
+* score before the roll
+* distance from target score at start of turn
+* did player choose to roll again after this roll?
+* strategy data
+
+
+
+
+Table for ML
+game_id
+round_id
+roll_id
+player_id
+turn_score_before_roll
+total_score_before_roll
+opponent_score_before_roll
+rolls_so_far_this_turn
+distance_from_target
+opponent_distance_from_target
+roll_outcome
+die_one
+die_two
+chose_to_roll_again
+player_won
+is_last_chance_round
