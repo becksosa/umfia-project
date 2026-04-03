@@ -3,7 +3,6 @@
 #### x<sup>2</sup> + 2bx + c = 0
 ------------------
 ------------------
-------------------
 
 I decided to take a bit of an unconventional approach to this problem and perform a Monte Carlo simulation. Below I've laid out my step by step process
  - Find the discriminant
