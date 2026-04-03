@@ -226,7 +226,7 @@ df.loc[(df.my_score + df.turn_score >= target) & (df.my_score + df.turn_score > 
 Next I wrote a function to return the optimal choice based on the table (the greater of p_win_if_roll and p_win_if_bank). However, I only have the probabilities of a select few game states, but that could be solved using a recursive function. If I call the function and the probabilities of the given game state are *not* already in the lookup, all 36 possible dice rolls are calculated and the new game states are calculated based on these dice rolls.
 
 Then the function is called again with the new game states, and the process repeats itself like this again, and again, and again and again until eventually a game state that *does have probabilities in the lookup table* is reached (This being the guaranteed wins from above). Using these probabilities, the probabilities of the the game state that led to the current state are calculated, and then the ones that led to that one, and so on and the entire table fills itself in all at once.
- - I've included an AI generated visual representation of the process [here](/recursive_example.html). 
+ - I've included an AI generated visual representation of the process [here]([/recursive_example.html](https://becksosa.github.io/umfia-project/recursive_example.html)). 
 
 ```python
 def optimal_p_win(player, my_score, opp_score, turn_score):
