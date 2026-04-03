@@ -5,6 +5,7 @@ You flip a coin 3 times and it comes up heads 3 times in a row. What is the prob
 Realistically, the problem says I am the one flipping the coin so I would simply look at the coin and if both sides are heads the probability it’s unfair is 1. If one side is heads and one side is tails then the probability the coin is unfair is 0.
 
 For the sake of argument let’s say I don’t look at the coin. Where did the coin come from? If I got it from a magician this would significantly increase the odds it’s unfair, if I picked it up off the street it’s probably unlikely to be a fake coin. There's not really enough information here to solve the problem confidently. However, I would assume this question isn’t being asked with a magician in mind so I made a few assumptions below and attempted to solve it:
+
 ------------------
 ## Solution One: Bayes Theorem
 I started by creating a function in python so I could easily call Bayes Theorem as needed:
