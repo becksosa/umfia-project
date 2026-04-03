@@ -1,5 +1,6 @@
 # Fair or Unfair Coin:
 You flip a coin 3 times and it comes up heads 3 times in a row. What is the probability the coin is an unfair coin? There are multiple ways to solve this problem. Provide as many solutions as you can.
+
 ----------------------------------
 ----------------------------------
 Realistically, the problem says I am the one flipping the coin so I would simply look at the coin and if both sides are heads the probability it’s unfair is 1. If one side is heads and one side is tails then the probability the coin is unfair is 0.
